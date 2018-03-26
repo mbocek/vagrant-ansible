@@ -21,10 +21,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.ssh.insert_key = false
 
     # Installs latest Ansible release (stable functionality)
-    config.vm.define "latest", primary: true do |latest|
-        latest.vm.provision "shell", path: "bootstrap.sh"
+    config.vm.define "develop", primary: true do |develop|
+        develop.vm.provision :shell, path: "bootstrap-build.sh"
+        develop.vm.provision :file, source: "bootstrap.sh", destination: "bootstrap.sh"
     end
 
     # Sync the user's home folder
-    config.vm.synced_folder "~/", "/home/vagrant/host-machine"
+    config.vm.synced_folder "~/", "/home/vagrant/host-machine", mount_options: ["dmode=775,fmode=664"]
 end
